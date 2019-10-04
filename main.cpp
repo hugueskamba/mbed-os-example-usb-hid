@@ -22,10 +22,22 @@ HID_REPORT input_report = {
     .data = {0}
 };
 
-DigitalOut led_out(LED1);
+InterruptIn button(PTC6);
+DigitalOut led_green(LED2);
+DigitalOut led_red(LED1);
+bool usb_state = false;
+
+void flip_usb_state()
+{
+    HID.enable_phy(usb_state);
+    usb_state = !usb_state;
+}
 
 int main(void)
 {
+    // attach a handler to be executed on the button rising edge
+    button.rise(&flip_usb_state);
+
     while (1) {
 
         // Fill the report
@@ -38,7 +50,15 @@ int main(void)
 
         // Try to read a msg
         if (HID.read_nb(&input_report)) {
-            led_out = !led_out;
+            
+            if (usb_state) {
+                led_red = 0;
+                led_green = !led_green;
+            } else {
+                led_green = 0;
+                led_red = !led_red;
+            }
+
             for (int i = 0; i < input_report.length; i++) {
                 printf("%d ", input_report.data[i]);
             }
