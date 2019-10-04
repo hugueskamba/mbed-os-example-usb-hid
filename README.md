@@ -1,1 +1,1 @@
-# mbed-os-example-usb-hid-
+# Mbed OS Example USB HID
