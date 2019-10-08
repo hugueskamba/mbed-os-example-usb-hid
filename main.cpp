@@ -28,9 +28,14 @@ DigitalOut led_green(LED2);
 
 void flip_usb_state()
 {
-    static bool usb_state = false;
-    HID.enable_phy(usb_state);
+    static bool usb_state = true;
     usb_state = !usb_state;
+
+    if (usb_state) {
+        HID.resume();
+    } else {
+        HID.suspend();
+    }
 }
 
 int main(void)
