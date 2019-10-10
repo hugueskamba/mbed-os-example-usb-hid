@@ -32,9 +32,9 @@ void flip_usb_state()
     usb_state = !usb_state;
 
     if (usb_state) {
-        HID.resume();
+        HID.connect();
     } else {
-        HID.suspend();
+        HID.deinit();
     }
 }
 
